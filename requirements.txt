@@ -1,2 +1,9 @@
+Libraries Needed for the project to run.
+
+
+npm install "library-name" 
+
+
+# Libraries
 properties-reader
 discord.js
