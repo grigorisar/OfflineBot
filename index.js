@@ -25,19 +25,23 @@ bot.once('ready', () => {
 });
 
 bot.on('message', message => {
-    let args = message.content.substring(PREFIX.length).split(" ");
+    let args = message.content.substring().split(" ");
     switch(args[0]){
-        case 'ping':
+        case '$ping':
             bot.commands.get('ping').execute(message , args);
             break;
-        case 'help':
-            message.channel.send('Made by Greg and Alex , in early Development');
+        case '$help':
+            message.channel.send('Made by Greg, Alex and Vladi , in early Development');
             break;
-        case 'info':
+        case '$info':
             bot.commands.get('info').execute(message , args);
             break;
-        case 'clear':
+        case '$clear':
             bot.commands.get('clear').execute(message , args);
+            break;
+        case '$poll':
+            bot.commands.get('poll').execute(message , args);
+            break;
     }
 });
 
