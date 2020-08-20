@@ -1,69 +1,74 @@
 const Discord = require('discord.js');
+const REACTIONS = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
+
 module.exports = {
     name: "poll" ,
     description: 'Command usage: $poll [message] "option 1" "option 2" .. "option 10".',
-    execute(message, args) { 
-        pollargs = format(args); 
+    execute(message, args) {    
+        args = format(args); 
 
-        if(pollargs.length<2){
-            message.channel.send('Include at least two options.');
-            message.channel.send(this.description);
+        //Message (arg[0]) 1 + range of options: 2-10
+        if(args.length<3){
+            message.channel.send('Include at least two options. \n'+ this.description);
             return -1;
-        }else if (pollargs.length>10){
-            message.channel.send('Ten options maximum, try again. ');
-            message.channel.send(this.description);
+        }else if (args.length>11){
+            message.channel.send('Ten options maximum, try again. \n' + this.description);
             return -1;
         }
-        const [embed, reaction] = createPoll(pollargs);
-        embed.setAuthor(message.member.user.username,message.member.avatarURL);
-        // console.log(embed);
-        sendPoll(message,embed,reaction);
+
+        sendPoll(message,createEmbed(message,args));
+        return 0;
     }
 }
 
-function format(args) {
-    return args.toString().substring(args[0].length+1).replace(/,/g, ' ').split("\"").filter(function (str) { return /\S/.test(str)});
-}
-
-function createPoll(poll) {
-    const reaction = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
-
+//Create Embed and fill out fields.
+function createEmbed(message,args) {
     try {
-        const message = poll.shift();
-
-
-        const embed = new Discord.MessageEmbed()
-        .setAuthor("Greg")
+       const embed = new Discord.MessageEmbed()
+        .setAuthor(message.member.user.username) 
         .setTimestamp()
         .setColor(0xFFC399)
         .setTitle("Let me know what you think.")
-        .setDescription(message)
-        .addField('React to vote.', optionBuilder(poll,reaction), true)
-        .setFooter("StoneLightning");
+        .setDescription(args.shift()) 
+        .addField('React to vote.', optionBuilder(args), true)
+        .setFooter("Offline Bot.");
+        
+        // After removing arg[0] aka the description, Trim reactions.
+        REACTIONS.splice(args.length);
 
-        // console.log("Sending poll.");
-        reaction.splice(poll.length);
-        return [embed,reaction];
+        return embed;
     } catch (error) {
         console.log(error);
-        return -1;
+        message.channel.send("Congrats you managed to break the command, DM Gregory#6547 to fix it for all of us. :) ");
+        return -1;       
     }
-
 }
 
-function optionBuilder(options,reaction) {
-    var str = "";
-    for (let index = 0; index < options.length; index++) {
-        str += reaction[index].toString() + options[index].toString() + "\n";
+//String Builder to look nice and fancy.
+function optionBuilder(args) {
+    //args is Pass By Reference so we init. a local variable.
+    var str = "", i = 0;
+    for (const emoji of REACTIONS) {
+        str += emoji + args[i++] + "\n"; //Local scope, args table not affected.   
     }
-    // console.log(str);
     return str;
 }
 
-async function sendPoll (message,embed,reaction) {
-    const m = await message.channel.send(embed);
-    // console.log(reaction);
-    for (const emoji of reaction) {
-        await m.react(emoji);    
-    } 
+//Reacting has to be Async.
+async function sendPoll (message,embed) {
+    if (message) {
+        const m = await message.channel.send(embed);
+        // console.log(reaction);
+        for (const emoji of REACTIONS) {
+            await m.react(emoji);    
+        } 
+    } else {
+        console.log("Error In poll.");
+        return -1;
+    }
+}
+
+// String formatting for the arguments done by yours truly.
+function format(args) {
+    return args.toString().replace(/,/g, ' ').split("\"").filter(function (str) { return /\S/.test(str)});
 }

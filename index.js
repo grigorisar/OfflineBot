@@ -9,7 +9,7 @@ const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 
 const PREFIX = '$';
-var version = "0.0.1"
+var version = "0.1.0"
 
 
 const commandFiles = fs.readdirSync('./commands/').filter(file =>  file.endsWith('.js'));
@@ -26,7 +26,9 @@ bot.once('ready', () => {
 
 bot.on('message', message => {
     let args = message.content.substring().split(" ");
-    switch(args[0]){
+    //Popping command string, so we don't have to trim it the executables.
+    let command = args.shift();
+    switch(command){
         case '$ping':
             bot.commands.get('ping').execute(message , args);
             break;

@@ -3,6 +3,8 @@ Libraries Needed for the project to run.
 
 npm install "library-name" 
 
+# Node Version
+node v12.18.2
 
 # Libraries
 properties-reader
