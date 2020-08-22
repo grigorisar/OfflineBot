@@ -16,16 +16,16 @@ module.exports = {
                 "Definitely",
                 "No",
                 "Absolutely",
-                "Not in a million years!",
+                "Not in a million years!"
             ];
-        
-            let response = responses[Math.floor(Math.random() * responses.length - 1)];
+            console.log(responses);
+            let response = responses[Math.floor(Math.random()*responses.length)];
 
             let embed = new Discord.MessageEmbed()
             .setTitle(`8Ball!`)
             .setDescription(`Your question: ${question}\nMy Reply: ${response}`)
             .setColor(getRandomColor())
-            message.channel.send(embed);
+            // message.channel.send(embed);
         }
     },
 };
