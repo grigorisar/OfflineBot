@@ -1,6 +1,8 @@
 
 module.exports = {
     name: "clear" ,
+    usage: "$clear <number>",
+    category: "moderation",
     description: "Clear messages max (20)",
     execute(message, args) { 
         if (!args[1]) {

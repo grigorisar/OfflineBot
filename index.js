@@ -25,9 +25,12 @@ bot.once('ready', () => {
 });
 
 bot.on('message', message => {
-    let args = message.content.substring().split(" ");
-    //Popping command string, so we don't have to trim it the executables.
-    let command = args.shift();
+    if(!message.content.startsWith(PREFIX)) return -1; // return not $     
+    
+    let args = message.content.substring().split(" "); // can add a .slice(PREFIX.length) to remove the $ but I dont mind it
+
+    //Trim command string and toLowerCase as case sensitivity doesn't matter.  
+    let command = args.shift().toLowerCase();
     switch(command){
         case '$ping':
             bot.commands.get('ping').execute(message , args);
@@ -44,6 +47,10 @@ bot.on('message', message => {
         case '$poll':
             bot.commands.get('poll').execute(message , args);
             break;
+        case '$8ball':
+            bot.commands.get('8ball').execute(message , args);
+            break;
+
     }
 });
 

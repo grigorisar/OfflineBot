@@ -3,16 +3,18 @@ const REACTIONS = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","
 
 module.exports = {
     name: "poll" ,
-    description: 'Command usage: $poll [message] "option 1" "option 2" .. "option 10".',
+    usage: '$poll [message] "option 1" "option 2" .. "option 10".',
+    category: "fun",
+    description: "Creates a Poll with up to 10 different poll options.",
     execute(message, args) {    
         args = format(args); 
 
         //Message (arg[0]) 1 + range of options: 2-10
         if(args.length<3){
-            message.channel.send('Include at least two options. \n'+ this.description);
+            message.channel.send(`Include at least two options.\n${this.usage}`);
             return -1;
         }else if (args.length>11){
-            message.channel.send('Ten options maximum, try again. \n' + this.description);
+            message.channel.send(`Ten options maximum, try again.\n${this.usage}`);
             return -1;
         }
 
@@ -27,10 +29,10 @@ function createEmbed(message,args) {
        const embed = new Discord.MessageEmbed()
         .setAuthor(message.member.user.username) 
         .setTimestamp()
-        .setColor(0xFFC399)
+        .setColor(getRandomColor())
         .setTitle("Let me know what you think.")
         .setDescription(args.shift()) 
-        .addField('React to vote.', optionBuilder(args), true)
+        .addField('Select Options.', optionBuilder(args), true)
         .setFooter("Offline Bot.");
         
         // After removing arg[0] aka the description, Trim reactions.
@@ -71,4 +73,13 @@ async function sendPoll (message,embed) {
 // String formatting for the arguments done by yours truly.
 function format(args) {
     return args.toString().replace(/,/g, ' ').split("\"").filter(function (str) { return /\S/.test(str)});
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }

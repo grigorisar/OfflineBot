@@ -1,5 +1,7 @@
 module.exports = {
     name: "info" ,
+    usage: "$ping" ,
+    category: "info",
     description: "Ping command.",
     execute(message, args) {
         if (args[1]=="devs") {
