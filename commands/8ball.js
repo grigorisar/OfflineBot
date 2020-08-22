@@ -25,7 +25,7 @@ module.exports = {
             .setTitle(`8Ball!`)
             .setDescription(`Your question: ${question}\nMy Reply: ${response}`)
             .setColor(getRandomColor())
-            // message.channel.send(embed);
+            message.channel.send(embed);
         }
     },
 };
