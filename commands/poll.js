@@ -17,6 +17,9 @@ module.exports = {
             message.channel.send(`Ten options maximum, try again.\n${this.usage}`);
             return -1;
         }
+        
+        // After removing arg[0] aka the description, Trim reactions.
+        REACTIONS.splice(args.length+1);
 
         sendPoll(message,createEmbed(message,args));
         return 0;
@@ -34,9 +37,6 @@ function createEmbed(message,args) {
         .setDescription(args.shift()) 
         .addField('Select Options.', optionBuilder(args), true)
         .setFooter("Offline Bot.");
-        
-        // After removing arg[0] aka the description, Trim reactions.
-        REACTIONS.splice(args.length);
 
         return embed;
     } catch (error) {
